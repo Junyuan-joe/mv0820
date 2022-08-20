@@ -11,16 +11,16 @@ import javax.persistence.*;
 import model.*;
 import java.util.*;
 /**
- * Servlet implementation class JPAStudentDeleteServlet
+ * Servlet implementation class JPACoffeeServlet
  */
-@WebServlet("/JPAStudentDeleteServlet")
-public class JPAStudentDeleteServlet extends HttpServlet {
+@WebServlet("/JPACoffeeServlet")
+public class JPACoffeeServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JPAStudentDeleteServlet() {
+    public JPACoffeeServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -30,26 +30,20 @@ public class JPAStudentDeleteServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		try {
-			EntityManagerFactory emf = Persistence.createEntityManagerFactory("mv0820");
-	        EntityManager em = emf.createEntityManager();
+		EntityManagerFactory emf = Persistence.createEntityManagerFactory("mv0820");
+        EntityManager em = emf.createEntityManager();
+        em.getTransaction().begin();
 
-	        em.getTransaction().begin();
-	        
-            Student obj=em.find(Student.class, 1002);
-	        System.out.println(obj);
-            em.remove(obj);
-	        
-            em.getTransaction().commit();
-	        em.close();
-	        emf.close();
-	        request.getRequestDispatcher("JPAStudentServlet").forward(request, response);
-	       
-			}catch(Exception ex) {
-				 response.getWriter().append("Error:"+ex.getMessage());
-			}
-
-		
+        Query query = em.createQuery("SELECT s FROM Coffee s");
+       
+        List<Coffee> list = query.getResultList();        
+        for (Coffee s : list) {
+            System.out.println(s);
+        }
+        em.close();
+        emf.close();
+        request.setAttribute("coffees", list);
+        request.getRequestDispatcher("coffee.jsp").forward(request, response);
 	}
 
 	/**

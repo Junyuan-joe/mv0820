@@ -10,17 +10,18 @@ import javax.servlet.http.HttpServletResponse;
 import javax.persistence.*;
 import model.*;
 import java.util.*;
+
 /**
- * Servlet implementation class JPAStudentDeleteServlet
+ * Servlet implementation class JPAFindStudentServlet
  */
-@WebServlet("/JPAStudentDeleteServlet")
-public class JPAStudentDeleteServlet extends HttpServlet {
+@WebServlet("/JPAFindStudentServlet")
+public class JPAFindStudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public JPAStudentDeleteServlet() {
+    public JPAFindStudentServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,20 +37,17 @@ public class JPAStudentDeleteServlet extends HttpServlet {
 
 	        em.getTransaction().begin();
 	        
-            Student obj=em.find(Student.class, 1002);
-	        System.out.println(obj);
-            em.remove(obj);
-	        
-            em.getTransaction().commit();
+            Student s= em.find(Student.class, 1002);           
+            
+	        em.getTransaction().commit();
 	        em.close();
 	        emf.close();
-	        request.getRequestDispatcher("JPAStudentServlet").forward(request, response);
-	       
+	        response.getWriter().append(s.toString());
+	       // request.getRequestDispatcher("JPAStudentServlet").forward(request, response);
 			}catch(Exception ex) {
 				 response.getWriter().append("Error:"+ex.getMessage());
 			}
 
-		
 	}
 
 	/**
